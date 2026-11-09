@@ -94,6 +94,8 @@ These have type `ConstructibleLine`, or `CL` for short.
 * `CL(a,b,c)` creates the line with equation $ax+by+c=0$. An error is thrown if `a`, `b`, and `c` are all zero. 
 * `CL(A,B)` creates the line that includes the points `A` and `B`. An error is thrown if `A` and `B` are the same point. 
 
+> *Note*: A line determined by `(a,b,c)` is exactly the same as the line determined by any nonzero multiple of `(a,b,c)`. Internally we scale these parameters so the rightmost nonzero element is `1`. So `CL(1,2,3)` is stored as as `CL(1/3, 2/3, 1)`.
+
 ### Incidence
 
 If `A` is a point and `X` is either a line or a circle, then `in(A,X)` (or `A ∈ X`) returns `true` if `A` lies on `X`. 
@@ -105,4 +107,20 @@ The intersection of two lines, two circles, or a line and a circle results in a 
 
 ## Construction Drawings
 
-TBW
+A straightedge and compass construction begins with two points, `A` and `B`, that are a unit distance apart. 
+* The straightedge can be used to create a line between two established points. 
+* The compass can be used to create a circle centered at an established point and passing through another establisehd point, or centered at an established point using the distance between two established points as its radius.
+
+Wherever we have there is an intersection of two of these shapes, a new point is established.
+
+The functions `ruler` and `compass` instantiate this process (see below).
+
+### Point names
+
+The points in a construction drawing are named by Julia symbols. The first two points are automatically `:A` and `:B` which correspond to the point `CP(0,0)` and `CP(1,0)`, respectively. 
+
+Points are created at the intersection of new lines/circles with the existing lines/circles. The new points are automatically named `:C`, `:D`, and so on. (In the rare instance that drawing has more than 26 points, the naming contiues with doubled letters: `:AA`, `:BB`, etc. )
+
+### Drawing
+
+The function `ruler` (which is acts as a straightedge) creates lines. 
