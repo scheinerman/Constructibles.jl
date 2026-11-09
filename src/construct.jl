@@ -5,15 +5,19 @@ function label_maker(i::Int, alphabet::String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ")::S
     n = length(alphabet)
 
     index = mod1(i, n)
-    ticks = i ÷ n
+    ticks = (i-1) ÷ n
 
     result = alphabet[index] ^ (ticks + 1)
 
     return Symbol(result)
 end
 
+"""
+    Construction
 
-
+This is a structure that holds points, lines, and circles created 
+using the `compass` and `ruler` functions. 
+"""
 struct Construction
     points::Dict{Symbol,CP}
     lines::Vector{CL}
@@ -38,7 +42,13 @@ function __init__()
     return global master = Construction()
 end
 
-function reset_construction!(C::Construction = master)
+"""
+    reset!(C::Construction = master)
+
+Remove all objects from the construction except for the initial points `:A` and `:B`
+that lie a unit distance apart.
+"""
+function reset!(C::Construction = master)
     for k in keys(C.points)
         delete!(C.points, k)
     end
@@ -56,7 +66,7 @@ function reset_construction!(C::Construction = master)
         pop!(C.circles)
     end
 
-    return nothing
+    redraw(C)
 end
 
 """
@@ -73,6 +83,11 @@ function display_points(C::Construction = master)
     return nothing
 end
 
+"""
+    display_objects(C::Construction = master)
+
+Display all the circles and lines in the construction. 
+"""
 function display_objects(C::Construction = master)
     for X in C.lines
         println(X)
@@ -160,14 +175,14 @@ function ruler(P1::Symbol, P2::Symbol, C::Construction = master)
     for X in C.lines
         pts = X ∩ L
         for P in pts
-            add_point!(P)
+            add_point!(P,C)
         end
     end
 
     for X in C.circles
         pts = X ∩ L
         for P in pts
-            add_point!(P)
+            add_point!(P,C)
         end
     end
 
@@ -178,19 +193,30 @@ function ruler(P1::Symbol, P2::Symbol, C::Construction = master)
 end
 
 
-function compass(CTR::Symbol, B::Symbol, C::Construction = master)
+"""
+    compass(CTR::Symbol, A::Symbol, C::Construction = master)
 
-    if !_check_symbols([CTR, B], C)
+Add a circle to the construction centered at `CTR` and passing through `A`.
+"""
+function compass(CTR::Symbol, A::Symbol, C::Construction = master)
+
+    if !_check_symbols([CTR, A], C)
         return false
     end
 
-    A = C.points[CTR]
-    r = dist(A, C.points[B])
+    ctr = C.points[CTR]
+    r = dist(ctr, C.points[A])
 
-    Z = CC(A, r)
+    Z = CC(ctr, r)
     _compass_work(Z, C)
 end
 
+"""
+    compass(CTR::Symbol, A::Symbol, B::Symbol, C::Construction = master)
+
+Add a circle to the construction centered at `CTR` with radius equal to the 
+distance between `B` and `C`. 
+"""
 function compass(CTR::Symbol, A::Symbol, B::Symbol, C::Construction = master)
     if !_check_symbols([CTR, A, B], C)
         return false
@@ -199,8 +225,6 @@ function compass(CTR::Symbol, A::Symbol, B::Symbol, C::Construction = master)
     r = dist(C.points[:A], C.points[:B])
     Z = CC(C.points[CTR], r)
     _compass_work(Z, C)
-
-
 end
 
 
@@ -221,7 +245,7 @@ function _compass_work(Z::CC, C::Construction = master)
     for X in C.circles
         pts = X ∩ Z
         for P in pts
-            add_point!(P)
+            add_point!(P, C)
         end
     end
 

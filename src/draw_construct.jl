@@ -73,6 +73,11 @@ function draw(L::CL)
     return draw(S)
 end
 
+"""
+    redraw(C::Construction = master)
+
+Redraw the construction.
+"""
 function redraw(C::Construction = master)
     newdraw()
     for P in values(C.points)
@@ -90,7 +95,13 @@ function redraw(C::Construction = master)
     return finish()
 end
 
-function draw_labels(C::Construction = master)
+"""
+    show_labels(C::Construction = master)
+
+Overlay the points in the construction with their names. The labels disappear
+after a subsequent`redraw`, `compass`, or `ruler`.
+"""
+function show_labels(C::Construction = master)
     for k in keys(C.points)
         P = C.points[k]
         x = float(P.x)
