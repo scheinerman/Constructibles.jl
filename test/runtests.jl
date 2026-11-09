@@ -1,4 +1,4 @@
-using Test, ConstructibleNumbers
+using Test, Constructibles
 
 a = 1 + sqrt(CN(2))
 

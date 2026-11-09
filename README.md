@@ -1,4 +1,4 @@
-# ConstructibleNumbers
+# Constructibles
 
 The *constructible numbers* are an extension of the rational numbers. They can be defined recursively as follows:
 * Integers are constructible.

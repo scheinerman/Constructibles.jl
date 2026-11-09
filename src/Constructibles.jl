@@ -1,4 +1,4 @@
-module ConstructibleNumbers
+module Constructibles
 
 using SymPy, SimpleDrawing, SimpleDrawingObjects, Plots, LinearAlgebraX
 
