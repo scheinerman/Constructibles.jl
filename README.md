@@ -3,7 +3,7 @@
 This module provides tools for compass and straightedge constructions. The sections below are as follows:
 * **Constructible Numbers**: These are the possible distances between points in a construction.
 * **Construcible Objects**: These are points, lines, and circles that can be constructed with straightedge and compass.
-* **Construction Drawings**: The `ruler` and `compass` functions can be used to create drawings akin to those made with an actual straightedge and compass. 
+* **Construction Drawings**: We provide functions can be used to create drawings akin to those made with an actual straightedge and compass. 
 
 ## Constructible Numbers
 

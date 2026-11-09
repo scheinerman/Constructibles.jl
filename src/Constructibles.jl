@@ -23,7 +23,11 @@ import Base:
     isone,
     isequal
 
-import SymPy.latex
+
+import SymPy: latex
+
+import SimpleDrawingObjects: draw
+
 
 export ConstructibleNumber,
     CN,
@@ -38,7 +42,19 @@ export ConstructibleNumber,
     center,
     radius,
     dist,
-    latex
+    Construction,
+    reset_construction!,
+    label_maker,
+    draw,
+    display_points,
+    display_objects,
+    add_point!,
+    add_line!,
+    add_circle!,
+    redraw,
+    draw_labels,
+    ruler,
+    compass
 
 const sym_type = Sym
 
@@ -90,7 +106,8 @@ function show(io::IO, x::CN)
 end
 
 function promote_rule(
-    ::Type{ConstructibleNumber}, ::Type{T}
+    ::Type{ConstructibleNumber},
+    ::Type{T},
 ) where {T<:Union{Integer,Rational}}
     return ConstructibleNumber
 end

@@ -1,8 +1,7 @@
 # interactively create constructions
 
-import SimpleDrawingObjects.draw
 
-function label_maker(i::Int, alphabet::String="ABCDEFGHIJKLMNOPQRSTUVWXYZ")::Symbol
+function label_maker(i::Int, alphabet::String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ")::Symbol
     n = length(alphabet)
 
     index = mod1(i, n)
@@ -13,22 +12,12 @@ function label_maker(i::Int, alphabet::String="ABCDEFGHIJKLMNOPQRSTUVWXYZ")::Sym
     return Symbol(result)
 end
 
-export Construction,
-    reset_construction!,
-    label_maker,
-    draw,
-    display_points,
-    display_objects,
-    add_point!,
-    add_object!,
-    redraw,
-    draw_labels
 
-export ruler, compass
 
 struct Construction
     points::Dict{Symbol,CP}
-    objects::Vector{CO}
+    lines::Vector{CL}
+    circles::Vector{CC}
 
     function Construction()
         A = CP(0, 0)
@@ -39,7 +28,7 @@ struct Construction
         d[:B] = B
 
         @info "New Construction created"
-        return new(d, CO[])
+        return new(d, CL[], CC[])
     end
 end
 
@@ -49,7 +38,7 @@ function __init__()
     return global master = Construction()
 end
 
-function reset_construction!(C::Construction=master)
+function reset_construction!(C::Construction = master)
     for k in keys(C.points)
         delete!(C.points, k)
     end
@@ -58,9 +47,15 @@ function reset_construction!(C::Construction=master)
     C.points[:A] = A
     C.points[:B] = B
 
-    while length(C.objects) > 0
-        pop!(C.objects)
+    while length(C.lines) > 0
+        pop!(C.lines)
     end
+
+
+    while length(C.circles) > 0
+        pop!(C.circles)
+    end
+
     return nothing
 end
 
@@ -69,17 +64,21 @@ end
 
 Print a table of the points in the construction.
 """
-function display_points(C::Construction=master)
+function display_points(C::Construction = master)
     np = length(C.points)
-    for k in 1:np
+    for k = 1:np
         P = label_maker(k)
         println(P, "\t", C.points[P])
     end
     return nothing
 end
 
-function display_objects(C::Construction=master)
-    for X in C.objects
+function display_objects(C::Construction = master)
+    for X in C.lines
+        println(X)
+    end
+
+    for X in C.circles
         println(X)
     end
     return nothing
@@ -91,7 +90,7 @@ end
 Add a point to a construction. Returns `true` if successful (it's a new point)
 or `false` otherwise (if the point is already in the construction).
 """
-function add_point!(P::CP, C::Construction=master)::Bool
+function add_point!(P::CP, C::Construction = master)::Bool
     if P ∈ values(C.points)
         return false
     end
@@ -105,19 +104,35 @@ function add_point!(P::CP, C::Construction=master)::Bool
     return true
 end
 
-function add_object!(X::CO, C::Construction=master)
-    if X ∈ C.objects
+
+
+function add_line!(L::CL, C::Construction = master)
+    if L ∈ C.lines
         return false
     end
-    push!(C.objects, X)
-    return true
+    push!(C.lines, L)
+    true
+end
+
+function add_circle!(Z::CC, C::Construction = master)
+    if Z ∈ C.circles
+        return false
+    end
+    push!(C.circles, Z)
+    true
 end
 
 
-function _check_symbols(SS::Vector{Symbol}, C::Construction=master)::Bool
-    for S in SS 
+
+
+
+
+
+
+function _check_symbols(SS::Vector{Symbol}, C::Construction = master)::Bool
+    for S in SS
         if !haskey(C.points, S)
-            return false 
+            return false
         end
     end
     return true
@@ -128,64 +143,88 @@ end
 
 Add the line between points `P1` and `P2`.
 """
-function ruler(P1::Symbol, P2::Symbol, C::Construction=master)
+function ruler(P1::Symbol, P2::Symbol, C::Construction = master)
 
-    if !_check_symbols([P1,P2], C)
+    if !_check_symbols([P1, P2], C)
         @info "Bad symbol"
-        return false 
-    end 
+        return false
+    end
 
     d = C.points
     L = CL(d[P1], d[P2])
 
-    if L ∈ C.objects # already have this line
+    if L ∈ C.lines # already have this line
         return false
     end
 
-    for X in C.objects
+    for X in C.lines
         pts = X ∩ L
         for P in pts
             add_point!(P)
         end
     end
 
-    add_object!(L, C)
+    for X in C.circles
+        pts = X ∩ L
+        for P in pts
+            add_point!(P)
+        end
+    end
+
+
+    add_line!(L, C)
 
     redraw()
 end
 
 
-function compass(CTR::Symbol, B::Symbol, C::Construction=master)
+function compass(CTR::Symbol, B::Symbol, C::Construction = master)
 
     if !_check_symbols([CTR, B], C)
-        return false 
-    end 
+        return false
+    end
 
     A = C.points[CTR]
     r = dist(A, C.points[B])
-    
-    Z = CC(A,r)
+
+    Z = CC(A, r)
     _compass_work(Z, C)
 end
 
-function compass(CTR::Symbol, A::Symbol, B::Symbol, C::Construction=master)
-    
+function compass(CTR::Symbol, A::Symbol, B::Symbol, C::Construction = master)
+    if !_check_symbols([CTR, A, B], C)
+        return false
+    end
+
+    r = dist(C.points[:A], C.points[:B])
+    Z = CC(C.points[CTR], r)
+    _compass_work(Z, C)
+
+
 end
 
 
 
-function _compass_work(Z::CC, C::Construction= master)
-    if Z ∈ C.objects 
-        return false 
+function _compass_work(Z::CC, C::Construction = master)
+    if Z ∈ C.circles
+        return false
     end
 
-    for X in C.objects
+    for X in C.lines
         pts = X ∩ Z
         for P in pts
             add_point!(P)
         end
     end
 
-    add_object!(Z, C)
+
+    for X in C.circles
+        pts = X ∩ Z
+        for P in pts
+            add_point!(P)
+        end
+    end
+
+    add_circle!(Z, C)
     redraw()
 end

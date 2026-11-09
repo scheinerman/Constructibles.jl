@@ -73,19 +73,24 @@ function draw(L::CL)
     return draw(S)
 end
 
-function redraw(C::Construction=master)
+function redraw(C::Construction = master)
     newdraw()
     for P in values(C.points)
         draw(P)
     end
 
-    for X in C.objects
+    for X in C.circles
         draw(X)
     end
+
+    for X in C.lines
+        draw(X)
+    end
+
     return finish()
 end
 
-function draw_labels(C::Construction=master)
+function draw_labels(C::Construction = master)
     for k in keys(C.points)
         P = C.points[k]
         x = float(P.x)
