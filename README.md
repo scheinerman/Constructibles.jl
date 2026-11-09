@@ -7,7 +7,7 @@ The *constructible numbers* are an extension of the rational numbers. They can b
 
 Constructible numbers are exactly the lengths that can be constructed using straightedge and compass (and an initial pair of points unit distance apart). 
 
-The `ConstructibleNumbers` module provides the the `ConstructibleNumber` type for working with constructible numbers.
+This `Constructibles` module provides the the `ConstructibleNumber` type for working with constructible numbers.
 
 > We provide the abbreviation `CN` for `ConstructibleNumber` (because it's a lot to type).
 
