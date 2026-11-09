@@ -1,6 +1,13 @@
 # Constructibles
 
-The *constructible numbers* are an extension of the rational numbers. They can be defined recursively as follows:
+This module provides tools for compass and straightedge constructions. The sections below are as follows:
+* **Constructible Numbers**: These are the possible distances between points in a construction.
+* **Construcible Objects**: These are points, lines, and circles that can be constructed with straightedge and compass.
+* **Construction Drawings**: The `ruler` and `compass` functions can be used to create drawings akin to those made with an actual straightedge and compass. 
+
+## Constructible Numbers
+
+*Constructible numbers* are an extension of the rational numbers. They can be defined recursively as follows:
 * Integers are constructible.
 * The sum, difference, product, and quotient of constructible numbers are constructible (division by zero is forbidden).
 * The square root of a nonnegative constructible number is constructible. In this implementation, all constructible numbers are real.
@@ -11,7 +18,7 @@ This `Constructibles` module provides the the `ConstructibleNumber` type for wor
 
 > We provide the abbreviation `CN` for `ConstructibleNumber` (because it's a lot to type).
 
-## Constructible Numbers
+### Basics
 
 Starting with an `Integer` or a `Rational`, we create a `ConstructibleNumber` like this:
 ```
@@ -95,3 +102,7 @@ If `A` is a point and `X` is either a line or a circle, then `in(A,X)` (or `A âˆ
 
 The intersection of two lines, two circles, or a line and a circle results in a list of constructible points. That list might have 0, 1, or 2 members.
 
+
+## Construction Drawings
+
+TBW
