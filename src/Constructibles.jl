@@ -48,7 +48,7 @@ export CC,
     latex,
     radius,
     redraw,
-    reset!,
+    restart!,
     ruler,
     show_labels
 

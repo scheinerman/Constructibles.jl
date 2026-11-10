@@ -45,12 +45,12 @@ function __init__()
 end
 
 """
-    reset!(C::Construction = master)
+    restart!(C::Construction = master)
 
 Remove all objects from the construction except for the initial points `:A` and `:B`
 that lie a unit distance apart.
 """
-function reset!(C::Construction = master)
+function restart!(C::Construction = master)
     for k in keys(C.points)
         delete!(C.points, k)
     end

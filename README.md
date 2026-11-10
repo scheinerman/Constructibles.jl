@@ -1,9 +1,9 @@
 # Constructibles
 
 This module provides tools for compass and straightedge constructions. The sections below are as follows:
-* **Constructible Numbers**: These are the possible distances between points in a construction.
-* **Construcible Objects**: These are points, lines, and circles that can be constructed with straightedge and compass.
-* **Construction Drawings**: We provide functions can be used to create drawings akin to those made with an actual straightedge and compass. 
+* **Constructible Numbers**: Possible distances between points in a construction.
+* **Construcible Objects**: Points, lines, and circles that can be constructed with straightedge and compass.
+* **Construction Drawings**: Interactive compass and straightedge constructions.
 
 ## Constructible Numbers
 
@@ -85,6 +85,7 @@ A *constructible circle* is a circle in the plane whose center is a constructibl
 * `CC(P,r)` creates a new circle centered at the point `P` with radius `r`. An error is thrown if the radius is negative. 
 * `CC(P,A)` creates a new circle centered at the point `P` that passes through the point `A`.
 
+The center of a constructible circle `Z` is returned by `center(Z)` and its radius by `radius(Z)`.
 
 ### Lines
 
@@ -102,7 +103,22 @@ If `A` is a point and `X` is either a line or a circle, then `in(A,X)` (or `A �
 
 ### Intersection
 
-The intersection of two lines, two circles, or a line and a circle results in a list of constructible points. That list might have 0, 1, or 2 members.
+The intersection of two lines, two circles, or a line and a circle results in a list of constructible points. That list might have 0, 1, or 2 members. 
+
+If `X` and `Y` are circles and/or lines, then `intersect(X,Y)` (or `X ∩ Y`) returns a list of points that are in both `X` and `Y`. 
+
+```
+julia> X = CC(0,0,1)  # radius 1 circle centered at the origin
+CC((0, 0), 1)
+
+julia> Y = CC(1,0,1)  # radius 1 circle centered at (1,0)
+CC((1, 0), 1)
+
+julia> X ∩ Y
+2-element Vector{ConstructiblePoint}:
+ CP(1/2, -sqrt(3)/2)
+ CP(1/2, sqrt(3)/2)
+```
 
 
 ## Construction Drawings
@@ -119,8 +135,76 @@ The functions `ruler` and `compass` instantiate this process (see below).
 
 The points in a construction drawing are named by Julia symbols. The first two points are automatically `:A` and `:B` which correspond to the point `CP(0,0)` and `CP(1,0)`, respectively. 
 
-Points are created at the intersection of new lines/circles with the existing lines/circles. The new points are automatically named `:C`, `:D`, and so on. (In the rare instance that drawing has more than 26 points, the naming contiues with doubled letters: `:AA`, `:BB`, etc. )
+Points are created at the intersection of new lines/circles with the existing lines/circles. The new points are automatically named `:C`, `:D`, and so on. (In case the drawing has more than 26 points, the naming contiues with doubled letters: `:AA`, `:BB`, etc.)
 
-### Drawing
+### Interactive drawing
 
-The function `ruler` (which is acts as a straightedge) creates lines. 
+The function `ruler` (a straightedge) creates lines and `compass` creates circles. The arguments to both are symbolic names of points; that is, `:A` is the input used to refer to point `A` in the construction.
+
+* `ruler(:A, :B)` draws a line between the points `A` and `B`.
+* `compass(:A, :B)` draws a circle centered at `A` and passing through `B`.
+* `compass(:A, :B, :C)` draws a circle centered at `A` whose radius is the distance between points `B` and `C`. 
+
+As lines and circles are added to the construction, new points are identified at the intersections of the added object and the objects already in the construction. The image is updated after each `ruler` or `compass` call. 
+
+#### Getting started 
+
+Initially, there are only two points in the construction, `A` and `B`, and they are distance one apart. [The coordinates of these points are `(0,0)` and `(1,0)`, respectively.] The only options available to the user at this point is one of the following:
+
+* `ruler(:A, :B)`
+* `compass(:A, :B)`
+* `compass(:B, :A)`
+
+After each command, the display is updated to show the new objects and any new points that are identified. 
+
+The `restart!` function is used to [re]initialize a construction. 
+
+> **Warning!** Using `restart!()` will delete any prior construction and leave a new construction with just the points `A` and `B`.
+
+#### Labels
+
+A construction typically shows only points, lines, and circles, but not the names of the points. Use `show_labels()` to have the names of the points displayed. The `redraw()` command will redraw the display without the labels. Also, any subsequent call to `ruler` or `compass` will also hide the labels. 
+
+#### Object information
+
+The function `display_points()` prints a list of points and their coordinates. The function `display_objects()` prints a list of lines and circles. 
+
+### Example
+
+We illustrate doing a construction with these interactive commands:
+```
+restart!()
+compass(:A, :B)
+ruler(:A, :B)
+compass(:C, :A)
+ruler(:A, :E)
+```
+
+This is the result:
+
+![](examples/ex1.png)
+
+Here is the same construction after `show_labels()`:
+
+![](examples/ex1-lab.png)
+
+The list of points:
+```
+julia> display_points()
+A       CP(0, 0)
+B       CP(1, 0)
+C       CP(-1, 0)
+D       CP(-2, 0)
+E       CP(-1/2, sqrt(3)/2)
+F       CP(-1/2, -sqrt(3)/2)
+G       CP(1/2, -sqrt(3)/2)
+```
+
+The list of lines and circles:
+```
+julia> display_objects()
+CL(0, 1, 0)
+CL(sqrt(3), 1, 0)
+CC((0, 0), 1)
+CC((-1, 0), 1)
+```

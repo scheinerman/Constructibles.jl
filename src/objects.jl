@@ -85,7 +85,7 @@ radius(C::CC) = C.rad
 (==)(C::CC, D::CC) = (C.ctr == D.ctr) && (C.rad == D.rad)
 
 hash(C::CC) = hash(C.ctr, hash(C.rad))
-hash(C::CC, h::UInt) = hash(C.ctr, hash(C.rad,h))
+hash(C::CC, h::UInt) = hash(C.ctr, hash(C.rad, h))
 
 function show(io::IO, C::CC)
     str = "CC(($(C.ctr.x), $(C.ctr.y)), $(C.rad))"
