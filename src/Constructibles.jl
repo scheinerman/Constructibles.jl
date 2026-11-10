@@ -27,7 +27,10 @@ import SymPy: latex
 import SimpleDrawingObjects: draw
 import Plots: center
 
-export CC,
+export add_circle!,
+    add_line!,
+    add_point!,
+    CC,
     center,
     CL,
     CN,

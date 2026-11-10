@@ -171,7 +171,7 @@ The function `display_points()` prints a list of points and their coordinates. T
 
 ### Example
 
-We illustrate doing a construction with these interactive commands:
+We illustrate making a construction with these interactive commands:
 ```
 restart!()
 compass(:A, :B)
@@ -208,3 +208,30 @@ CL(sqrt(3), 1, 0)
 CC((0, 0), 1)
 CC((-1, 0), 1)
 ```
+
+### Additional drawing commands
+
+The functions `add_point!`, `add_circle!`, and `add_line!` can be used to add objects to the construction 
+without using `compass` and `ruler`. It is necessary to invoke `redraw()` to see the result. 
+
+> **Note**: The viewable area of the construction is automatically calculated based on the points and circles in the drawing. If a line is added outside the viewing region, it may not become visible even after a `redraw()`. 
+
+We illustrate adding a point to create a 60° angle and then constructing its bisector.
+
+```julia
+restart!()
+
+# create a 60° angle from :A
+add_point!(CP(CN(1//2), sqrt(CN(3))/2))  # this will be the point :C
+ruler(:A, :B)
+ruler(:A, :C)
+
+# draw circles around points :B and :C
+compass(:C, :A)
+compass(:B, :A)
+
+# draw the angle bisector
+ruler(:A, :F)
+```
+
+![](examples/ex2.png)
