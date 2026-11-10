@@ -133,7 +133,7 @@ The functions `ruler` and `compass` instantiate this process (see below).
 
 ### Point names
 
-The points in a construction drawing are named by Julia symbols. The first two points are automatically `:A` and `:B` which correspond to the point `CP(0,0)` and `CP(1,0)`, respectively. 
+The points in a construction drawing are named by Julia symbols. The first two points are automatically `:A` and `:B` which correspond to the points `CP(0,0)` and `CP(1,0)`, respectively. 
 
 Points are created at the intersection of new lines/circles with the existing lines/circles. The new points are automatically named `:C`, `:D`, and so on. (In case the drawing has more than 26 points, the naming contiues with doubled letters: `:AA`, `:BB`, etc.)
 
