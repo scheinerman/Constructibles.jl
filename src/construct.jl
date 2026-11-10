@@ -31,7 +31,6 @@ struct Construction
         d[:A] = A
         d[:B] = B
 
-        @info "New Construction created"
         return new(d, CL[], CC[])
     end
 end

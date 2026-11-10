@@ -16,23 +16,53 @@ function draw(C::CC)
     return draw(Z)
 end
 
-function find_endpoints(L::CL)
-    x1, x2 = xlims()
-    y1, y2 = ylims()
 
-    a1 = floor(Int, x1)
-    a2 = ceil(Int, x2)
-    b1 = floor(Int, y1)
-    b2 = floor(Int, y2)
+export get_boundaries   # debug
 
-    LL = CP(a1, b1)  # lower left corner
-    LR = CP(a2, b1)  # lower right corner
-    UL = CP(a1, b2)
-    UR = CP(a2, b2)
 
-    # # DEBUG #
-    # R = Rectangle(a1,b1,a2,b2)
-    # draw(R)
+function get_boundaries(C::Construction=master)::Vector{CN}
+    LEFT = RIGHT = BOTTOM = TOP = CN(0)
+
+    function extender(x::CN, y::CN)
+        LEFT = (x < LEFT) ? x : LEFT
+        RIGHT = (x > RIGHT) ? x : RIGHT
+        BOTTOM = (y < BOTTOM) ? y : BOTTOM
+        TOP = (y > TOP) ? y : TOP
+    end
+
+    for P in values(C.points)
+        extender(P.x, P.y)
+    end
+
+    for Z in C.circles
+        x = Z.ctr.x 
+        y = Z.ctr.y 
+        r = Z.rad 
+
+        extender(x-r, y-r)
+        extender(x+r, y+r)
+    end
+
+    return [LEFT, RIGHT, BOTTOM, TOP]
+end
+
+
+
+function find_endpoints(theLine::CL, C::Construction = master)
+
+    L, R, B, T = get_boundaries(C)
+
+    Δ = CN(1//2)
+
+    L -= Δ
+    R += Δ
+    B -= Δ
+    T += Δ
+
+    LL = CP(L, B)  # lower left corner
+    LR = CP(R, B)  # lower right corner
+    UL = CP(L, T)
+    UR = CP(R, T)
 
     LEFT = CL(LL, UL)  # left boundary
     RIGHT = CL(LR, UR)
@@ -42,13 +72,13 @@ function find_endpoints(L::CL)
     end_points = CP[]
 
     for BDY in [LEFT, RIGHT, TOP, BOT]
-        PP = BDY ∩ L   # where L meets a boundary line
+        PP = BDY ∩ theLine   # where L meets a boundary line
         if length(PP) == 0
             continue
         end
 
         X = PP[1]  # this is where BDY meets L 
-        if (a1 ≤ X.x ≤ a2) && (b1 ≤ X.y ≤ b2)
+        if (L ≤ X.x ≤ R) && (B ≤ X.y ≤ T)
             push!(end_points, X)
         end
     end
@@ -56,8 +86,14 @@ function find_endpoints(L::CL)
     return unique!(end_points)
 end
 
-function draw(L::CL)
-    PP = find_endpoints(L)
+
+
+
+
+
+
+function draw(L::CL, C::Construction=master)
+    PP = find_endpoints(L, C)
     if length(PP) < 2
         return nothing
     end
@@ -78,7 +114,7 @@ end
 
 Redraw the construction.
 """
-function redraw(C::Construction = master)
+function redraw(C::Construction=master)
     newdraw()
     for P in values(C.points)
         draw(P)
@@ -89,7 +125,7 @@ function redraw(C::Construction = master)
     end
 
     for X in C.lines
-        draw(X)
+        draw(X, C)
     end
 
     return finish()
@@ -101,7 +137,7 @@ end
 Overlay the points in the construction with their names. The labels disappear
 after a subsequent`redraw`, `compass`, or `ruler`.
 """
-function show_labels(C::Construction = master)
+function show_labels(C::Construction=master)
     for k in keys(C.points)
         P = C.points[k]
         x = float(P.x)
