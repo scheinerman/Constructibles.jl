@@ -151,7 +151,7 @@ As lines and circles are added to the construction, new points are identified at
 
 Initially, there are only two points in the construction, `A` and `B`, and they are distance one apart. [The coordinates of these points are `(0,0)` and `(1,0)`, respectively.] The only options available to the user at this point is one of the following:
 
-* `ruler(:A, :B)`
+* `ruler(:A, :B)` which is equivalent to `ruler(:B, :A)`
 * `compass(:A, :B)`
 * `compass(:B, :A)`
 
