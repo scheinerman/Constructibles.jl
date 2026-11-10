@@ -218,7 +218,7 @@ without using `compass` and `ruler`. It is necessary to invoke `redraw()` to see
 
 We illustrate adding a point to create a 60° angle and then constructing its bisector.
 
-```julia
+```
 restart!()
 
 # create a 60° angle from :A
