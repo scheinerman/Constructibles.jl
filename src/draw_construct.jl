@@ -16,11 +16,7 @@ function draw(C::CC)
     return draw(Z)
 end
 
-
-export get_boundaries   # debug
-
-
-function get_boundaries(C::Construction=master)::Vector{CN}
+function get_boundaries(C::Construction = master)::Vector{CN}
     LEFT = RIGHT = BOTTOM = TOP = CN(0)
 
     function extender(x::CN, y::CN)
@@ -35,9 +31,9 @@ function get_boundaries(C::Construction=master)::Vector{CN}
     end
 
     for Z in C.circles
-        x = Z.ctr.x 
-        y = Z.ctr.y 
-        r = Z.rad 
+        x = Z.ctr.x
+        y = Z.ctr.y
+        r = Z.rad
 
         extender(x-r, y-r)
         extender(x+r, y+r)
@@ -92,7 +88,7 @@ end
 
 
 
-function draw(L::CL, C::Construction=master)
+function draw(L::CL, C::Construction = master)
     PP = find_endpoints(L, C)
     if length(PP) < 2
         return nothing
@@ -114,7 +110,7 @@ end
 
 Redraw the construction.
 """
-function redraw(C::Construction=master)
+function redraw(C::Construction = master)
     newdraw()
     for P in values(C.points)
         draw(P)
@@ -137,7 +133,7 @@ end
 Overlay the points in the construction with their names. The labels disappear
 after a subsequent`redraw`, `compass`, or `ruler`.
 """
-function show_labels(C::Construction=master)
+function show_labels(C::Construction = master)
     for k in keys(C.points)
         P = C.points[k]
         x = float(P.x)

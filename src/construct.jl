@@ -1,6 +1,9 @@
-# interactively create constructions
+"""
+    label_maker(i::Int, alphabet::String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ")::Symbol
 
-
+Create symbols for constructions. `1` becomes `:A` through `26` becomes `:Z`. 
+After that, `27` is `:AA` and so forth. 
+"""
 function label_maker(i::Int, alphabet::String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ")::Symbol
     n = length(alphabet)
 
@@ -120,6 +123,11 @@ end
 
 
 
+"""
+    add_line!(L::CL, C::Construction = master)
+
+Add a line to the construction. 
+"""
 function add_line!(L::CL, C::Construction = master)
     if L ∈ C.lines
         return false
@@ -128,6 +136,11 @@ function add_line!(L::CL, C::Construction = master)
     true
 end
 
+"""
+    add_circle!(Z::CC, C::Construction = master)
+
+Add a circle to the construction. 
+"""
 function add_circle!(Z::CC, C::Construction = master)
     if Z ∈ C.circles
         return false
@@ -138,11 +151,12 @@ end
 
 
 
+"""
+    _check_symbols(SS::Vector{Symbol}, C::Construction = master)::Bool
 
-
-
-
-
+Use this to check if a list of symbols (representing points) are all known
+to the construction. 
+"""
 function _check_symbols(SS::Vector{Symbol}, C::Construction = master)::Bool
     for S in SS
         if !haskey(C.points, S)
@@ -174,14 +188,14 @@ function ruler(P1::Symbol, P2::Symbol, C::Construction = master)
     for X in C.lines
         pts = X ∩ L
         for P in pts
-            add_point!(P,C)
+            add_point!(P, C)
         end
     end
 
     for X in C.circles
         pts = X ∩ L
         for P in pts
-            add_point!(P,C)
+            add_point!(P, C)
         end
     end
 
@@ -214,7 +228,7 @@ end
     compass(CTR::Symbol, A::Symbol, B::Symbol, C::Construction = master)
 
 Add a circle to the construction centered at `CTR` with radius equal to the 
-distance between `B` and `C`. 
+distance between `A` and `B`. 
 """
 function compass(CTR::Symbol, A::Symbol, B::Symbol, C::Construction = master)
     if !_check_symbols([CTR, A, B], C)

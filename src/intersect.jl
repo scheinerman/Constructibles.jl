@@ -3,9 +3,10 @@
     intersect(L::CL, Z::CC)::Vector{CP}
     intersect(Z1::CC, Z2::CC)::Vector{CP}
 
-
 Find the intersection of the respective constructible objects. 
 The result is a list of 0, 1, or 2 constructible points. 
+
+The `∩` operator may be used for intersection. 
 """
 function intersect(L1::CL, L2::CL)::Vector{CP}
     result = CP[]

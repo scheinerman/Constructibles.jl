@@ -21,14 +21,14 @@ function (/)(a::CN, b::CN)::CN
     return CN(simplify(a.sym / b.sym))
 end
 
-function Constructibles.inv(a::CN)::CN
+function inv(a::CN)::CN
     if iszero(a)
         throw(DomainError(a, "Zero is not invertible."))
     end
     return (1 / a)
 end
 
-function Constructibles.sqrt(a::CN)::CN
+function sqrt(a::CN)::CN
     if a < 0
         throw(DomainError(a, "Cannot take the square root of a negative number."))
     end

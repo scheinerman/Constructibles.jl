@@ -17,13 +17,12 @@ end
 
 const CP = ConstructiblePoint
 
-Base.hash(p::CP) = Base.hash(p.x.sym.o, Base.hash(p.y.sym.o))
+hash(p::CP) = hash(p.x.sym.o, Base.hash(p.y.sym.o))
+hash(p::CP, h::UInt) = hash(p.x.sym.o, Base.hash(p.y.sym.o, h))
 
 (==)(A::CP, B::CP) = (A.x == B.x) && (A.y == B.y)
 
 function show(io::IO, p::CP)
-    #return print(io, "CP(" * string(p.x) * "," * string(p.y) * ")")
-
     return print(io, "CP($(p.x), $(p.y))")
 end
 
@@ -82,9 +81,11 @@ const CC = ConstructibleCircle
 
 center(C::CC) = C.ctr
 radius(C::CC) = C.rad
+
 (==)(C::CC, D::CC) = (C.ctr == D.ctr) && (C.rad == D.rad)
 
 hash(C::CC) = hash(C.ctr, hash(C.rad))
+hash(C::CC, h::UInt) = hash(C.ctr, hash(C.rad,h))
 
 function show(io::IO, C::CC)
     str = "CC(($(C.ctr.x), $(C.ctr.y)), $(C.rad))"
@@ -169,6 +170,13 @@ function hash(L::CL)
     b = L.b.sym.o
     c = L.c.sym.o
     return hash(a, hash(b, hash(c)))
+end
+
+function hash(L::CL, h::UInt)
+    a = L.a.sym.o
+    b = L.b.sym.o
+    c = L.c.sym.o
+    return hash(a, hash(b, hash(c, h)))
 end
 
 """

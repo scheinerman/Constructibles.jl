@@ -3,58 +3,54 @@ module Constructibles
 using SymPy, SimpleDrawing, SimpleDrawingObjects, Plots, LinearAlgebraX
 
 import Base:
-    show,
-    promote_rule,
-    float,
-    Float64,
     (+),
     (-),
     (*),
     (/),
     (<),
     (==),
+    float,
+    Float64,
     hash,
     in,
     intersect,
     inv,
-    sqrt,
-    iszero,
+    isequal,
     isless,
     isone,
-    isequal
-
+    iszero,
+    promote_rule,
+    show,
+    sqrt
 
 import SymPy: latex
-
 import SimpleDrawingObjects: draw
+import Plots: center
 
-
-export ConstructibleNumber,
-    CN,
-    ConstructiblePoint,
-    CP,
-    ConstructibleCircle,
-    CC,
-    ConstructibleLine,
-    CL,
-    ConstructibleObject,
-    CO,
+export CC,
     center,
-    radius,
-    dist,
+    CL,
+    CN,
+    CO,
+    compass,
+    ConstructibleCircle,
+    ConstructibleLine,
+    ConstructibleNumber,
+    ConstructibleObject,
+    ConstructiblePoint,
     Construction,
-    reset!,
-    label_maker,
-    draw,
-    display_points,
+    CP,
     display_objects,
-    add_point!,
-    add_line!,
-    add_circle!,
+    display_points,
+    dist,
+    draw,
+    label_maker,
+    latex,
+    radius,
     redraw,
-    show_labels,
+    reset!,
     ruler,
-    compass
+    show_labels
 
 const sym_type = Sym
 
@@ -92,13 +88,15 @@ ConstructibleNumber() = zero(ConstructibleNumber)
 const CN = ConstructibleNumber
 
 hash(a::CN) = hash(a.sym.o)
+hash(a::CN, h::UInt) = hash(a.sym.o, h)
 
-# function BigFloat(a::CN)
-#     s = "big(0) + " * string(a.sym)
-#     return Core.eval(Main, Meta.parse(s))
-# end
+"""
+    float(a::CN)
 
+Convert `a` to a `Float64` number. 
+"""
 float(a::CN) = float(a.sym)
+
 Float64(a::CN) = float(a.sym)
 
 function show(io::IO, x::CN)
@@ -112,6 +110,19 @@ function promote_rule(
     return ConstructibleNumber
 end
 
+"""
+    latex(a::CN)
+
+Return a `String` for the LaTeX code for `a`.
+
+### Example
+```
+julia> a = 1 + sqrt(CN(3));
+
+julia> println(latex(a))
+1 + \\sqrt{3}
+```
+"""
 latex(a::CN) = SymPy.latex(a.sym)
 
 const _EXACT = Union{CN,Integer,Rational}
