@@ -104,13 +104,11 @@ end
 """
     add_point!(P::CP, C::Construction = master)::Bool
 
-Add a point to a construction. Returns `true` if successful (it's a new point)
-or `false` otherwise (if the point is already in the construction). Follow with
-`redraw()` to refresh the drawing. 
+Add a point to a construction. 
 """
-function add_point!(P::CP, C::Construction = master)::Bool
+function add_point!(P::CP, C::Construction = master)
     if P ∈ values(C.points)
-        return false
+        return 
     end
 
     k = length(C.points) + 1
@@ -119,7 +117,7 @@ function add_point!(P::CP, C::Construction = master)::Bool
 
     println("New point $S: $P")
 
-    return true
+    redraw()
 end
 
 
@@ -127,29 +125,27 @@ end
 """
     add_line!(L::CL, C::Construction = master)
 
-Add a line to the construction. Follow with
-`redraw()` to refresh the drawing. 
+Add a line to the construction.
 """
 function add_line!(L::CL, C::Construction = master)
     if L ∈ C.lines
-        return false
+        return 
     end
     push!(C.lines, L)
-    true
+    redraw()
 end
 
 """
     add_circle!(Z::CC, C::Construction = master)
 
-Add a circle to the construction. Follow with
-`redraw()` to refresh the drawing. 
+Add a circle to the construction. 
 """
 function add_circle!(Z::CC, C::Construction = master)
     if Z ∈ C.circles
-        return false
+        return 
     end
     push!(C.circles, Z)
-    true
+    redraw()
 end
 
 

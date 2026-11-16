@@ -211,8 +211,11 @@ CC((-1, 0), 1)
 
 ### Additional drawing commands
 
-The functions `add_point!`, `add_circle!`, and `add_line!` can be used to add objects to the construction 
-without using `compass` and `ruler`. It is necessary to invoke `redraw()` to see the result. 
+The functions `add_point!`, `add_circle!`, and `add_line!` can be used to add objects to the construction without using `compass` and `ruler`.
+
+ The argument to these functions must be a `ConstructiblePoint`, `ConstructibleCircle`, or `ConstructibleLine`, respectively. 
+
+> **Note**: The `add_circle!` and `add_line!` functions do *not* identify new points in the construction. 
 
 > **Note**: The viewable area of the construction is automatically calculated based on the points and circles in the drawing. If a line is added outside the viewing region, it may not become visible even after a `redraw()`. 
 
