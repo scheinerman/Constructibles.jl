@@ -238,3 +238,30 @@ ruler(:A, :F)
 ```
 
 ![](examples/ex2.png)
+
+## Multiple Drawings
+
+The contruction functions `compass`, `ruler`, and so forth do their bidding on a (hidden) data structure (named `Constructibles.master`). For the most part, this should be irrelevant to the user.
+
+However, it is possible to specify different constructions. Start like this:
+```
+julia> X = Construction()
+Construction with 2 point(s), 0 line(s), and 0 circle(s)
+```
+
+Now use `compass`, `ruler`, and so on with `X` as an additional argument, like this:
+```
+julia> ruler(:A, :B, X)
+
+julia> compass(:A, :B, X)
+New point C: CP(-1, 0)
+
+julia> X
+Construction with 3 point(s), 1 line(s), and 1 circle(s)
+```
+
+### Copying and pasting constructions
+
+If `X` is a construction, then `Y=deepcopy(X)` makes an independent copy of `X` saved in `Y`. For working with the master construction, use these functions:
+* `X = copy_from_master()` creates a copy of the master construction and assigns the copy to `X`.
+* `paste_into_master(X)` makes a copy of `X` as the master construction. 
