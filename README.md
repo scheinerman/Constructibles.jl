@@ -265,3 +265,12 @@ Construction with 3 point(s), 1 line(s), and 1 circle(s)
 If `X` is a construction, then `Y=deepcopy(X)` makes an independent copy of `X` saved in `Y`. For working with the master construction, use these functions:
 * `X = copy_from_master()` creates a copy of the master construction and assigns the copy to `X`.
 * `paste_into_master(X)` makes a copy of `X` as the master construction. 
+
+## Caveats
+
+`ConstructibleNumbers` are exact algebraic expressions. We use `PySym` for calculations with and comparisons of these numbers. As these algebraic expressions become more complicated, the calculations become slower. Constructions with many points can become very slow.
+
+### To do list
+
+* Consider replacing `PySym` with a more performant (and purely Julia) computer algebra engine.
+* Create a way to remove points/lines/circles from constructions. 
