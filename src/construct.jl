@@ -44,6 +44,17 @@ function __init__()
     return global master = Construction()
 end
 
+
+function show(io::IO, C::Construction)
+    np = length(C.points)
+    nc = length(C.circles)
+    nl = length(C.lines)
+
+
+    return print(io, "Construction with $np point(s), $nl line(s), and $nc circle(s)")
+end
+
+
 """
     restart!(C::Construction = master)
 
@@ -108,7 +119,7 @@ Add a point to a construction.
 """
 function add_point!(P::CP, C::Construction = master)
     if P ∈ values(C.points)
-        return 
+        return
     end
 
     k = length(C.points) + 1
@@ -117,7 +128,7 @@ function add_point!(P::CP, C::Construction = master)
 
     println("New point $S: $P")
 
-    redraw()
+    redraw(C)
 end
 
 
@@ -129,10 +140,10 @@ Add a line to the construction.
 """
 function add_line!(L::CL, C::Construction = master)
     if L ∈ C.lines
-        return 
+        return
     end
     push!(C.lines, L)
-    redraw()
+    redraw(C)
 end
 
 """
@@ -142,10 +153,10 @@ Add a circle to the construction.
 """
 function add_circle!(Z::CC, C::Construction = master)
     if Z ∈ C.circles
-        return 
+        return
     end
     push!(C.circles, Z)
-    redraw()
+    redraw(C)
 end
 
 
@@ -201,7 +212,7 @@ function ruler(P1::Symbol, P2::Symbol, C::Construction = master)
 
     add_line!(L, C)
 
-    redraw()
+    redraw(C)
 end
 
 
@@ -249,7 +260,7 @@ function _compass_work(Z::CC, C::Construction = master)
     for X in C.lines
         pts = X ∩ Z
         for P in pts
-            add_point!(P)
+            add_point!(P, C)
         end
     end
 
@@ -262,5 +273,31 @@ function _compass_work(Z::CC, C::Construction = master)
     end
 
     add_circle!(Z, C)
+    redraw(C)
+end
+
+
+"""
+    copy_from_master()::Construction
+
+Create an idependent copy of the master construction. 
+
+# Example
+```
+julia> X = copy_from_master()
+Construction with 5 point(s), 1 line(s), and 3 circle(s)
+```
+"""
+function copy_from_master()::Construction
+    deepcopy(Constructibles.master)
+end
+
+"""
+    paste_into_master(X::Construction)
+
+Make the master construction a copy of `X`.
+"""
+function paste_into_master(X::Construction)
+    Constructibles.master = deepcopy(X)
     redraw()
 end
