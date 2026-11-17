@@ -134,11 +134,12 @@ Overlay the points in the construction with their names. The labels disappear
 after a subsequent`redraw`, `compass`, or `ruler`.
 """
 function show_labels(C::Construction = master)
+    point_size = 24
     for k in keys(C.points)
         P = C.points[k]
         x = float(P.x)
         y = float(P.y)
-        annotate!(x, y, (string(k), :red, 20))
+        annotate!(x, y, (string(k), :red, point_size))
     end
     return finish()
 end
