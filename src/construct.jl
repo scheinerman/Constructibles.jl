@@ -49,8 +49,6 @@ function show(io::IO, C::Construction)
     np = length(C.points)
     nc = length(C.circles)
     nl = length(C.lines)
-
-
     return print(io, "Construction with $np point(s), $nl line(s), and $nc circle(s)")
 end
 
@@ -170,6 +168,7 @@ to the construction.
 function _check_symbols(SS::Vector{Symbol}, C::Construction = master)::Bool
     for S in SS
         if !haskey(C.points, S)
+            @info "No such point $S"
             return false
         end
     end
@@ -184,15 +183,14 @@ Add the line between points `P1` and `P2`.
 function ruler(P1::Symbol, P2::Symbol, C::Construction = master)
 
     if !_check_symbols([P1, P2], C)
-        @info "Bad symbol"
-        return false
+        return
     end
 
     d = C.points
     L = CL(d[P1], d[P2])
 
     if L ∈ C.lines # already have this line
-        return false
+        return
     end
 
     for X in C.lines
@@ -224,7 +222,7 @@ Add a circle to the construction centered at `CTR` and passing through `A`.
 function compass(CTR::Symbol, A::Symbol, C::Construction = master)
 
     if !_check_symbols([CTR, A], C)
-        return false
+        return
     end
 
     ctr = C.points[CTR]
@@ -242,7 +240,7 @@ distance between `A` and `B`.
 """
 function compass(CTR::Symbol, A::Symbol, B::Symbol, C::Construction = master)
     if !_check_symbols([CTR, A, B], C)
-        return false
+        return
     end
 
     r = dist(C.points[:A], C.points[:B])
@@ -275,6 +273,63 @@ function _compass_work(Z::CC, C::Construction = master)
     add_circle!(Z, C)
     redraw(C)
 end
+
+### DELETION METHODS for Lines and Circles
+
+
+"""
+    delete_line!(L::CL, C::Construction)
+
+Delete a line from a construction.
+"""
+function delete_line!(L::CL, C::Construction = master)
+    if L ∈ C.lines
+        idx = findfirst(x -> x==L, C.lines)
+        deleteat!(C.lines, idx)
+        redraw(C)
+    else
+        @info "No such line $L in the construction"
+    end
+end
+
+"""
+    delete_circle!(X::CC, C::Construction)
+
+Delete a circle from a construction.
+"""
+function delete_circle!(X::CC, C::Construction = master)
+    if X ∈ C.circles
+        idx = findfirst(x -> x==X, C.circles)
+        deleteat!(C.circles, idx)
+        redraw(C)
+    else
+        @info "No such circle $X in the construction"
+    end
+end
+
+
+
+
+# """
+#     delete_point!(P::Symbol, C::Construction = master)
+
+# This is a broken method for deleting a point from a construction. Don't use it.
+# """
+# function delete_point!(P::Symbol, C::Construction = master)
+#     if !_check_symbols([P], C)
+#         return
+#     end
+
+#     delete!(C.points, P)
+# end
+
+
+
+
+
+
+
+#### COPY/PASTE master
 
 
 """

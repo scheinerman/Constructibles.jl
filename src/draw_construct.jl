@@ -82,12 +82,6 @@ function find_endpoints(theLine::CL, C::Construction = master)
     return unique!(end_points)
 end
 
-
-
-
-
-
-
 function draw(L::CL, C::Construction = master)
     PP = find_endpoints(L, C)
     if length(PP) < 2
