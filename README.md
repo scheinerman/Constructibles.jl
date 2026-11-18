@@ -92,7 +92,7 @@ The center of a constructible circle `Z` is returned by `center(Z)` and its radi
 A *constructible line* is a line in the plane whose equation is of the form $ax+by+c=0$ where the coefficients are constructible numbers (not all zero). 
 These have type `ConstructibleLine`, or `CL` for short.
 
-* `CL(a,b,c)` creates the line with equation $ax+by+c=0$. An error is thrown if `a` and `b`,  are both zero. 
+* `CL(a,b,c)` creates the line with equation $ax+by+c=0$. An error is thrown if `a` and `b`  are both zero. 
 * `CL(A,B)` creates the line that includes the points `A` and `B`. An error is thrown if `A` and `B` are the same point. 
 
 > *Note*: A line determined by `(a,b,c)` is exactly the same as the line determined by any nonzero multiple of `(a,b,c)`. Internally we scale these parameters so the rightmost nonzero element is `1`. So `CL(1,2,3)` is stored as as `CL(1/3, 2/3, 1)`.
