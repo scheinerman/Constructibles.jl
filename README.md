@@ -1,7 +1,7 @@
 # Constructibles
 
 This module provides tools for compass and straightedge constructions. The sections below are as follows:
-* **Constructible Numbers**: Possible distances between points in a construction.
+* **Constructible Numbers**: Possible distances between points in a construction. These are exact real numbers that can be created using integers, addition, subtraction, multiplication, division, and square root. 
 * **Construcible Objects**: Points, lines, and circles that can be constructed with straightedge and compass.
 * **Construction Drawings**: Interactive compass and straightedge constructions.
 
@@ -242,9 +242,26 @@ ruler(:A, :F)
 ### Deletion
 
 It is possible to delete lines and circles from a construction with the following functions:
-* `delete_point!`
-* `delete_line!`
-* `delete_circle!`  
+* `delete_point!`: This can either be of the form `delete_point!(:P)` or `delete_point!(CP(x,y))`. In both cases, the names of points will be renamed so that the sequence of names is `:A`, `:B`, and so on without gaps. 
+```
+julia> restart!()
+
+julia> add_point!(CP(1,2))
+New point C: CP(1, 2)
+
+julia> display_points()
+A       CP(0, 0)
+B       CP(1, 0)
+C       CP(1, 2)
+
+julia> delete_point!(:B)
+
+julia> display_points()
+A       CP(0, 0)
+B       CP(1, 2)
+```
+* `delete_line!(Z)` where `Z` is a constructible circle, `CC(CP(x,y), r)`.
+* `delete_circle!(L)` where `L` is a constructible line, `CL(a,b,c)`.
 
 > If points and/or circles are removed from a construction, lines might note be drawn properly. 
 

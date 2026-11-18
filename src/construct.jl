@@ -288,7 +288,7 @@ function delete_line!(L::CL, C::Construction=master)
         deleteat!(C.lines, idx)
         redraw(C)
     else
-        @info "No such line $L in the construction"
+        @info "No line $L in the construction"
     end
 end
 
@@ -303,7 +303,7 @@ function delete_circle!(X::CC, C::Construction=master)
         deleteat!(C.circles, idx)
         redraw(C)
     else
-        @info "No such circle $X in the construction"
+        @info "No circle $X in the construction"
     end
 end
 
@@ -333,6 +333,23 @@ function delete_point!(P::Symbol, C::Construction=master)
     delete!(C.points, old_last)
     redraw(C)
 end
+
+
+function delete_point!(P::CP, C::Construction = master)
+    if P ∉ values(C.points) 
+        @info "No point $P in this construction"
+        return 
+    end
+
+    for S in keys(C.points)
+        if C.points[S] == P 
+            delete_point!(S, C)
+            return 
+        end
+    end
+    @info "This should not happen in delete_point!($P)"
+end
+
 
 #### COPY/PASTE master
 
