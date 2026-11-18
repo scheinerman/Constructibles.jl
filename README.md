@@ -241,7 +241,12 @@ ruler(:A, :F)
 
 ### Deletion
 
-It is possible to delete lines and circles from a construction with the functions `delete_line!` and `delete_circle!`.  At present, there is no function for deleting points. 
+It is possible to delete lines and circles from a construction with the following functions:
+* `delete_point!`
+* `delete_line!`
+* `delete_circle!`  
+
+> If points and/or circles are removed from a construction, lines might note be drawn properly. 
 
 ## Multiple Drawings
 
@@ -277,4 +282,3 @@ If `X` is a construction, then `Y=deepcopy(X)` makes an independent copy of `X` 
 ### To do list
 
 * Consider replacing `PySym` with a more performant (and purely Julia) computer algebra engine.
-* Point deletion from a `Construction` is tricky because of how we assign symbols. Not sure I'd bother. 

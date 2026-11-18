@@ -16,14 +16,14 @@ function draw(C::CC)
     return draw(Z)
 end
 
-function get_boundaries(C::Construction = master)::Vector{CN}
+function get_boundaries(C::Construction=master)::Vector{CN}
     LEFT = RIGHT = BOTTOM = TOP = CN(0)
 
     function extender(x::CN, y::CN)
         LEFT = (x < LEFT) ? x : LEFT
         RIGHT = (x > RIGHT) ? x : RIGHT
         BOTTOM = (y < BOTTOM) ? y : BOTTOM
-        TOP = (y > TOP) ? y : TOP
+        return TOP = (y > TOP) ? y : TOP
     end
 
     for P in values(C.points)
@@ -35,17 +35,14 @@ function get_boundaries(C::Construction = master)::Vector{CN}
         y = Z.ctr.y
         r = Z.rad
 
-        extender(x-r, y-r)
-        extender(x+r, y+r)
+        extender(x - r, y - r)
+        extender(x + r, y + r)
     end
 
     return [LEFT, RIGHT, BOTTOM, TOP]
 end
 
-
-
-function find_endpoints(theLine::CL, C::Construction = master)
-
+function find_endpoints(theLine::CL, C::Construction=master)
     L, R, B, T = get_boundaries(C)
 
     Δ = CN(1//2)
@@ -82,7 +79,7 @@ function find_endpoints(theLine::CL, C::Construction = master)
     return unique!(end_points)
 end
 
-function draw(L::CL, C::Construction = master)
+function draw(L::CL, C::Construction=master)
     PP = find_endpoints(L, C)
     if length(PP) < 2
         return nothing
@@ -104,7 +101,7 @@ end
 
 Redraw the construction.
 """
-function redraw(C::Construction = master)
+function redraw(C::Construction=master)
     newdraw()
     for P in values(C.points)
         draw(P)
@@ -127,7 +124,7 @@ end
 Overlay the points in the construction with their names. The labels disappear
 after a subsequent`redraw`, `compass`, or `ruler`.
 """
-function show_labels(C::Construction = master)
+function show_labels(C::Construction=master)
     point_size = 24
     for k in keys(C.points)
         P = C.points[k]

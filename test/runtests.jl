@@ -1,13 +1,12 @@
 using Test, Constructibles, LinearAlgebraX
 
-
 @testset "Basics" begin
     a = 1 + sqrt(CN(2))
 
     @test a > 0
     @test a * a / a == a
 
-    @test (a-1)*(a+1) == a^2 - 1
+    @test (a - 1) * (a + 1) == a^2 - 1
 
     φ = (1 + sqrt(CN(5))) / 2
 
@@ -16,7 +15,7 @@ using Test, Constructibles, LinearAlgebraX
     M = CN.([1 3; 2 5])
     v = CN.([3, 5])
 
-    @test M*v == CN.([18; 31])
+    @test M * v == CN.([18; 31])
     @test rankx(M) == 2
 end
 
@@ -31,7 +30,7 @@ end
 
     Z1 = CC(A, 2)
     Z2 = CC(B, 2)
-    @test length(Z1∩Z2) == 2
+    @test length(Z1 ∩ Z2) == 2
 
     @test length(Z1 ∩ L1) == 2
 
@@ -42,5 +41,4 @@ end
 
     @test CP(1, 0) ∈ L
     @test CP(1, 0) ∈ Z
-
 end

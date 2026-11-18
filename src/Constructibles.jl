@@ -46,6 +46,7 @@ export add_circle!,
     CP,
     delete_circle!,
     delete_line!,
+    delete_point!,
     display_objects,
     display_points,
     dist,
@@ -110,8 +111,7 @@ function show(io::IO, x::CN)
 end
 
 function promote_rule(
-    ::Type{ConstructibleNumber},
-    ::Type{T},
+    ::Type{ConstructibleNumber}, ::Type{T}
 ) where {T<:Union{Integer,Rational}}
     return ConstructibleNumber
 end

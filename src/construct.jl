@@ -1,18 +1,33 @@
 """
-    label_maker(i::Int, alphabet::String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ")::Symbol
+    label_maker(i::Int)::Symbol
 
 Create symbols for constructions. `1` becomes `:A` through `26` becomes `:Z`. 
 After that, `27` is `:AA` and so forth. 
 """
-function label_maker(i::Int, alphabet::String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ")::Symbol
+function label_maker(i::Int)::Symbol
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     n = length(alphabet)
 
     index = mod1(i, n)
-    ticks = (i-1) ÷ n
+    ticks = (i - 1) ÷ n
 
     result = alphabet[index] ^ (ticks + 1)
 
     return Symbol(result)
+end
+
+"""
+    decode_label(code::Symbol)::Int
+
+This is the inverse function of `label_maker`.
+"""
+function decode_label(code::Symbol)::Int
+    code_str = string(code)
+    letter = code_str[1]
+    wrap = length(code_str)
+
+    idx = (letter - 'A' + 1) + 26 * (wrap - 1)
+    return idx
 end
 
 """
@@ -44,7 +59,6 @@ function __init__()
     return global master = Construction()
 end
 
-
 function show(io::IO, C::Construction)
     np = length(C.points)
     nc = length(C.circles)
@@ -52,14 +66,13 @@ function show(io::IO, C::Construction)
     return print(io, "Construction with $np point(s), $nl line(s), and $nc circle(s)")
 end
 
-
 """
     restart!(C::Construction = master)
 
 Remove all objects from the construction except for the initial points `:A` and `:B`
 that lie a unit distance apart.
 """
-function restart!(C::Construction = master)
+function restart!(C::Construction=master)
     for k in keys(C.points)
         delete!(C.points, k)
     end
@@ -72,12 +85,11 @@ function restart!(C::Construction = master)
         pop!(C.lines)
     end
 
-
     while length(C.circles) > 0
         pop!(C.circles)
     end
 
-    redraw(C)
+    return redraw(C)
 end
 
 """
@@ -85,9 +97,9 @@ end
 
 Print a table of the points in the construction.
 """
-function display_points(C::Construction = master)
+function display_points(C::Construction=master)
     np = length(C.points)
-    for k = 1:np
+    for k in 1:np
         P = label_maker(k)
         println(P, "\t", C.points[P])
     end
@@ -99,7 +111,7 @@ end
 
 Display all the circles and lines in the construction. 
 """
-function display_objects(C::Construction = master)
+function display_objects(C::Construction=master)
     for X in C.lines
         println(X)
     end
@@ -115,9 +127,9 @@ end
 
 Add a point to a construction. 
 """
-function add_point!(P::CP, C::Construction = master)
+function add_point!(P::CP, C::Construction=master)
     if P ∈ values(C.points)
-        return
+        return nothing
     end
 
     k = length(C.points) + 1
@@ -126,22 +138,20 @@ function add_point!(P::CP, C::Construction = master)
 
     println("New point $S: $P")
 
-    redraw(C)
+    return redraw(C)
 end
-
-
 
 """
     add_line!(L::CL, C::Construction = master)
 
 Add a line to the construction.
 """
-function add_line!(L::CL, C::Construction = master)
+function add_line!(L::CL, C::Construction=master)
     if L ∈ C.lines
-        return
+        return nothing
     end
     push!(C.lines, L)
-    redraw(C)
+    return redraw(C)
 end
 
 """
@@ -149,15 +159,13 @@ end
 
 Add a circle to the construction. 
 """
-function add_circle!(Z::CC, C::Construction = master)
+function add_circle!(Z::CC, C::Construction=master)
     if Z ∈ C.circles
-        return
+        return nothing
     end
     push!(C.circles, Z)
-    redraw(C)
+    return redraw(C)
 end
-
-
 
 """
     _check_symbols(SS::Vector{Symbol}, C::Construction = master)::Bool
@@ -165,7 +173,7 @@ end
 Use this to check if a list of symbols (representing points) are all known
 to the construction. 
 """
-function _check_symbols(SS::Vector{Symbol}, C::Construction = master)::Bool
+function _check_symbols(SS::Vector{Symbol}, C::Construction=master)::Bool
     for S in SS
         if !haskey(C.points, S)
             @info "No such point $S"
@@ -180,17 +188,16 @@ end
 
 Add the line between points `P1` and `P2`.
 """
-function ruler(P1::Symbol, P2::Symbol, C::Construction = master)
-
+function ruler(P1::Symbol, P2::Symbol, C::Construction=master)
     if !_check_symbols([P1, P2], C)
-        return
+        return nothing
     end
 
     d = C.points
     L = CL(d[P1], d[P2])
 
     if L ∈ C.lines # already have this line
-        return
+        return nothing
     end
 
     for X in C.lines
@@ -207,29 +214,26 @@ function ruler(P1::Symbol, P2::Symbol, C::Construction = master)
         end
     end
 
-
     add_line!(L, C)
 
-    redraw(C)
+    return redraw(C)
 end
-
 
 """
     compass(CTR::Symbol, A::Symbol, C::Construction = master)
 
 Add a circle to the construction centered at `CTR` and passing through `A`.
 """
-function compass(CTR::Symbol, A::Symbol, C::Construction = master)
-
+function compass(CTR::Symbol, A::Symbol, C::Construction=master)
     if !_check_symbols([CTR, A], C)
-        return
+        return nothing
     end
 
     ctr = C.points[CTR]
     r = dist(ctr, C.points[A])
 
     Z = CC(ctr, r)
-    _compass_work(Z, C)
+    return _compass_work(Z, C)
 end
 
 """
@@ -238,19 +242,17 @@ end
 Add a circle to the construction centered at `CTR` with radius equal to the 
 distance between `A` and `B`. 
 """
-function compass(CTR::Symbol, A::Symbol, B::Symbol, C::Construction = master)
+function compass(CTR::Symbol, A::Symbol, B::Symbol, C::Construction=master)
     if !_check_symbols([CTR, A, B], C)
-        return
+        return nothing
     end
 
     r = dist(C.points[:A], C.points[:B])
     Z = CC(C.points[CTR], r)
-    _compass_work(Z, C)
+    return _compass_work(Z, C)
 end
 
-
-
-function _compass_work(Z::CC, C::Construction = master)
+function _compass_work(Z::CC, C::Construction=master)
     if Z ∈ C.circles
         return false
     end
@@ -262,7 +264,6 @@ function _compass_work(Z::CC, C::Construction = master)
         end
     end
 
-
     for X in C.circles
         pts = X ∩ Z
         for P in pts
@@ -271,20 +272,19 @@ function _compass_work(Z::CC, C::Construction = master)
     end
 
     add_circle!(Z, C)
-    redraw(C)
+    return redraw(C)
 end
 
 ### DELETION METHODS for Lines and Circles
-
 
 """
     delete_line!(L::CL, C::Construction)
 
 Delete a line from a construction.
 """
-function delete_line!(L::CL, C::Construction = master)
+function delete_line!(L::CL, C::Construction=master)
     if L ∈ C.lines
-        idx = findfirst(x -> x==L, C.lines)
+        idx = findfirst(x -> x == L, C.lines)
         deleteat!(C.lines, idx)
         redraw(C)
     else
@@ -295,11 +295,11 @@ end
 """
     delete_circle!(X::CC, C::Construction)
 
-Delete a circle from a construction.
+Delete a circle `X` from a construction.
 """
-function delete_circle!(X::CC, C::Construction = master)
+function delete_circle!(X::CC, C::Construction=master)
     if X ∈ C.circles
-        idx = findfirst(x -> x==X, C.circles)
+        idx = findfirst(x -> x == X, C.circles)
         deleteat!(C.circles, idx)
         redraw(C)
     else
@@ -307,30 +307,34 @@ function delete_circle!(X::CC, C::Construction = master)
     end
 end
 
+"""
+    delete_point!(P::Symbol, C::Construction = master)
 
+Delete point `P` from a construction. 
+"""
+function delete_point!(P::Symbol, C::Construction=master)
+    if !_check_symbols([P], C)
+        return nothing
+    end
 
+    np = length(C.points)  # number of points before deletion. 
+    idx = decode_label(P)  # index number of the point P 
 
-# """
-#     delete_point!(P::Symbol, C::Construction = master)
+    delete!(C.points, P)   # remove P from the point list 
 
-# This is a broken method for deleting a point from a construction. Don't use it.
-# """
-# function delete_point!(P::Symbol, C::Construction = master)
-#     if !_check_symbols([P], C)
-#         return
-#     end
+    # relabel all points with labels after P 
 
-#     delete!(C.points, P)
-# end
-
-
-
-
-
-
+    for k in (idx + 1):np
+        S = label_maker(k)   # old symbol name
+        T = label_maker(k - 1) # new symbol name
+        C.points[T] = C.points[S]
+    end
+    old_last = label_maker(np)
+    delete!(C.points, old_last)
+    redraw(C)
+end
 
 #### COPY/PASTE master
-
 
 """
     copy_from_master()::Construction
@@ -344,7 +348,7 @@ Construction with 5 point(s), 1 line(s), and 3 circle(s)
 ```
 """
 function copy_from_master()::Construction
-    deepcopy(Constructibles.master)
+    return deepcopy(Constructibles.master)
 end
 
 """
@@ -354,5 +358,5 @@ Make the master construction a copy of `X`.
 """
 function paste_into_master(X::Construction)
     Constructibles.master = deepcopy(X)
-    redraw()
+    return redraw()
 end
