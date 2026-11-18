@@ -260,8 +260,8 @@ julia> display_points()
 A       CP(0, 0)
 B       CP(1, 2)
 ```
-* `delete_line!(Z)` where `Z` is a constructible circle, `CC(CP(x,y), r)`.
-* `delete_circle!(L)` where `L` is a constructible line, `CL(a,b,c)`.
+* `delete_circle!(Z)` where `Z` is a constructible circle, `CC(CP(x,y), r)`.
+* `delete_line!(L)` where `L` is a constructible line, `CL(a,b,c)`.
 
 > If points and/or circles are removed from a construction, lines might note be drawn properly. 
 
