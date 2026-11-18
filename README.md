@@ -239,6 +239,10 @@ ruler(:A, :F)
 
 ![](examples/ex2.png)
 
+### Deletion
+
+It is possible to delete lines and circles from a construction with the functions `delete_line!` and `delete_circle!`.  At present, there is no function for deleting points. 
+
 ## Multiple Drawings
 
 The contruction functions `compass`, `ruler`, and so forth do their bidding on a (hidden) data structure (named `Constructibles.master`). For the most part, this should be irrelevant to the user.
@@ -268,9 +272,9 @@ If `X` is a construction, then `Y=deepcopy(X)` makes an independent copy of `X` 
 
 ## Caveats
 
-`ConstructibleNumbers` are exact algebraic expressions. We use `PySym` for calculations with and comparisons of these numbers. As these algebraic expressions become more complicated, the calculations become slower. Constructions with many points can become very slow.
+`ConstructibleNumbers` are exact algebraic expressions. We use `PySym` for calculations with and comparisons of these numbers. As these algebraic expressions become more complicated, the calculations become slower. Constructions with many objects can become very slow.
 
 ### To do list
 
 * Consider replacing `PySym` with a more performant (and purely Julia) computer algebra engine.
-* Create a way to remove points/lines/circles from constructions. 
+* Point deletion from a `Construction` is tricky because of how we assign symbols. Not sure I'd bother. 
