@@ -57,8 +57,8 @@ struct ConstructibleCircle <: ConstructibleObject
     rad::CN
 
     function ConstructibleCircle(Z::CP, r::_EXACT)
-        if r < 0
-            throw(DomainError(r, "radius cannot be negative"))
+        if r ≤ 0
+            throw(DomainError(r, "radius must be positive"))
         end
         return new(Z, r)
     end
@@ -70,8 +70,8 @@ struct ConstructibleCircle <: ConstructibleObject
 
     function ConstructibleCircle(x::_EXACT, y::_EXACT, r::_EXACT)
         Z = CP(x, y)
-        if r < 0
-            throw(DomainError(r, "radius cannot be negative"))
+        if r ≤ 0
+            throw(DomainError(r, "radius must be positive"))
         end
         return new(Z, r)
     end
@@ -112,8 +112,8 @@ end
 Return a triple by scaling `(a,b,c)` so the last nonzero entry is `1`.
 """
 function _canonical(a::_EXACT, b::_EXACT, c::_EXACT)::Tuple
-    if a == b == c == 0
-        error("0x + 0y + 0 = 0 is not a valid equation of a line.")
+    if a == b == 0
+        error("0x + 0y + $c = 0 is not a valid equation of a line")
     end
     a, b, c = CN.((a, b, c))
 
@@ -151,7 +151,7 @@ struct ConstructibleLine <: ConstructibleObject
 
     function ConstructibleLine(A::CP, B::CP)
         if A == B
-            error("Points must be distinct.")
+            error("Points must be distinct")
         end
         M = [A.x A.y CN(1); B.x B.y CN(1)]
         a, b, c = nullspacex(M)

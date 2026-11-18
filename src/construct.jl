@@ -331,25 +331,23 @@ function delete_point!(P::Symbol, C::Construction=master)
     end
     old_last = label_maker(np)
     delete!(C.points, old_last)
-    redraw(C)
+    return redraw(C)
 end
 
-
-function delete_point!(P::CP, C::Construction = master)
-    if P ∉ values(C.points) 
+function delete_point!(P::CP, C::Construction=master)
+    if P ∉ values(C.points)
         @info "No point $P in this construction"
-        return 
+        return nothing
     end
 
     for S in keys(C.points)
-        if C.points[S] == P 
+        if C.points[S] == P
             delete_point!(S, C)
-            return 
+            return nothing
         end
     end
     @info "This should not happen in delete_point!($P)"
 end
-
 
 #### COPY/PASTE master
 

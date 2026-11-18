@@ -82,7 +82,7 @@ The distance between points `A` and `B` is returned by `dist(A,B)`.
 
 A *constructible circle* is a circle in the plane whose center is a constructible point and whose radius is a constructible number. These have type `ConstructibleCircle`, or `CC` for short.
 
-* `CC(P,r)` creates a new circle centered at the point `P` with radius `r`. An error is thrown if the radius is negative. 
+* `CC(P,r)` creates a new circle centered at the point `P` with radius `r`. An error is thrown if the radius is nonpositive. 
 * `CC(P,A)` creates a new circle centered at the point `P` that passes through the point `A`.
 
 The center of a constructible circle `Z` is returned by `center(Z)` and its radius by `radius(Z)`.
@@ -92,7 +92,7 @@ The center of a constructible circle `Z` is returned by `center(Z)` and its radi
 A *constructible line* is a line in the plane whose equation is of the form $ax+by+c=0$ where the coefficients are constructible numbers (not all zero). 
 These have type `ConstructibleLine`, or `CL` for short.
 
-* `CL(a,b,c)` creates the line with equation $ax+by+c=0$. An error is thrown if `a`, `b`, and `c` are all zero. 
+* `CL(a,b,c)` creates the line with equation $ax+by+c=0$. An error is thrown if `a` and `b`,  are both zero. 
 * `CL(A,B)` creates the line that includes the points `A` and `B`. An error is thrown if `A` and `B` are the same point. 
 
 > *Note*: A line determined by `(a,b,c)` is exactly the same as the line determined by any nonzero multiple of `(a,b,c)`. Internally we scale these parameters so the rightmost nonzero element is `1`. So `CL(1,2,3)` is stored as as `CL(1/3, 2/3, 1)`.
