@@ -45,6 +45,8 @@ julia> phi^2 - phi - 1
 0
 ```
 
+We provide `sqrtx` as an exact square root function. It is easier to type `1 + sqrtx(3)` as opposed to `1 + sqrt(CN(3))`. 
+
 ### Conversion
 
 Use `float` or `Float64` to convert a `ConstructibleNumber` to a `Float64`:

@@ -34,3 +34,24 @@ function sqrt(a::CN)::CN
     end
     return CN(simplify(sqrt(a.sym)))
 end
+
+"""
+    sqrtx(a::T) where {T<:Real}
+
+Exact square root. `a` should be an `Integer`, `Rational`, or `ConstructibleNumber`.
+
+## Example
+```
+julia> 1 + sqrt(3)
+2.732050807568877
+
+julia> 1 + sqrtx(3)
+1 + sqrt(3)
+
+julia> typeof(ans)
+ConstructibleNumbe
+```
+"""
+function sqrtx(a::T)::CN where {T<:Real}
+    return sqrt(CN(a))
+end

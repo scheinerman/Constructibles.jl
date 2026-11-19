@@ -57,7 +57,8 @@ export add_circle!,
     redraw,
     restart!,
     ruler,
-    show_labels
+    show_labels,
+    sqrtx
 
 const sym_type = Sym
 
