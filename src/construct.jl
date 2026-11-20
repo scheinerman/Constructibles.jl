@@ -92,6 +92,8 @@ function restart!(C::Construction=master)
     return redraw(C)
 end
 
+### DISPLAYING OBJECTS
+
 """
     display_points(C::Construction = master)
 
@@ -107,20 +109,88 @@ function display_points(C::Construction=master)
 end
 
 """
-    display_objects(C::Construction = master)
+    display_lines(C::Construction=master)
 
-Display all the circles and lines in the construction. 
+Display all the lines in the construction. 
 """
-function display_objects(C::Construction=master)
-    for X in C.lines
-        println(X)
-    end
-
-    for X in C.circles
-        println(X)
+function display_lines(C::Construction=master)
+    nl = length(C.lines)
+    for i in 1:nl
+        println("$i\t$(C.lines[i])")
     end
     return nothing
 end
+
+"""
+    display_circles(C::Construction=master)
+
+Display all the circles in the construction. 
+"""
+function display_circles(C::Construction=master)
+    nc = length(C.circles)
+    for i in 1:nc
+        println("$i\t$(C.circles[i])")
+    end
+    return nothing
+end
+
+### FETCHING OBJECTS
+
+"""
+    get_point(P::Symbol, C::Construction=master)
+    get_point(idx::Int, C::Construction=master)
+
+
+Get the point named `P` or the point number `idx`. That is, 
+`get_point(:A)` is the same as `get_point(1)`, `get_point(:B)` is the same
+as `get_point(2)`, and so on. 
+"""
+function get_point(P::Symbol, C::Construction=master)
+    if haskey(C.points, P)
+        return C.points[P]
+    end
+    @info "No such point with name :$P"
+end
+
+function get_point(idx::Int, C::Construction=master)
+    if idx < 1 || idx > length(C.points)
+        @info "No such point at index $idx"
+        return nothing
+    end
+
+    S = label_maker(idx)
+    return get_point(S, C)
+end
+
+"""
+    get_line(idx::Int, C::Construction = master)
+
+Get the line with index `idx`.
+"""
+function get_line(idx::Int, C::Construction=master)
+    nl = length(C.lines)
+    if idx < 1 || idx > nl
+        @info "No such line at index $idx"
+        return nothing
+    end
+    return C.lines[idx]
+end
+
+"""
+    get_line(idx::Int, C::Construction = master)
+
+Get the line with index `idx`.
+"""
+function get_circle(idx::Int, C::Construction=master)
+    nc = length(C.circles)
+    if idx < 1 || idx > nc
+        @info "No such circle at index $idx"
+        return nothing
+    end
+    return C.circles[idx]
+end
+
+### ADDING OBJECTS WITHOUT ruler OR compass
 
 """
     add_point!(P::CP, C::Construction = master)::Bool

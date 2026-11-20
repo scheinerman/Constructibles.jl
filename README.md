@@ -1,9 +1,32 @@
 # Constructibles
 
-This module provides tools for compass and straightedge constructions. The sections below are as follows:
+This module provides tools for compass and straightedge constructions. The sections below cover the following topics:
 * **Constructible Numbers**: Possible distances between points in a construction. These are exact real numbers that can be created using integers, addition, subtraction, multiplication, division, and square root. 
 * **Construcible Objects**: Points, lines, and circles that can be constructed with straightedge and compass.
 * **Construction Drawings**: Interactive compass and straightedge constructions.
+
+## Quick Example
+
+Compass and straightedge constructions are seeded with two points `:A` and `:B` that are distance one apart. To find the midpoint of the line segment joining them, proceed as follows:
+
+```
+using Constructibles
+compass(:A, :B)
+compass(:B, :A)
+ruler(:A, :B)
+ruler(:C, :D)
+show_labels()
+```
+
+Here is the result:
+
+![](examples/bisect.png)
+
+Point `:G` is the midpoint between `:A` and `:B`. 
+```
+julia> get_point(:G)
+CP(1/2, 0)
+```
 
 ## Constructible Numbers
 
@@ -202,14 +225,36 @@ F       CP(-1/2, -sqrt(3)/2)
 G       CP(1/2, -sqrt(3)/2)
 ```
 
-The list of lines and circles:
+The list of lines:
 ```
-julia> display_objects()
-CL(0, 1, 0)
+julia> display_lines()
+1       CL(0, 1, 0)
+2       CL(sqrt(3), 1, 0)
+```
+
+The list of circles:
+```
+julia> display_circles()
+1       CC((0, 0), 1)
+2       CC((-1, 0), 1)
+```
+
+### Accessing the objects
+
+The functions `get_point`, `get_line`, and `get_circle` return the relevant object from the construction.  Points can be accessed either by their symbol (`get_point(:A)`) or by an index number (`get_point(1)` being the same as `get_point(:A)`). Lines and circles are accessed by index number (as shown with `display_lines` and `display_circles`).
+
+```
+julia> get_point(:D)
+CP(-2, 0)
+
+julia> get_line(2)
 CL(sqrt(3), 1, 0)
-CC((0, 0), 1)
-CC((-1, 0), 1)
+
+julia> get_circle(4)
+[ Info: No such circle at index 4
 ```
+
+
 
 ### Additional drawing commands
 
