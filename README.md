@@ -107,8 +107,9 @@ The distance between points `A` and `B` is returned by `dist(A,B)`.
 
 A *constructible circle* is a circle in the plane whose center is a constructible point and whose radius is a constructible number. These have type `ConstructibleCircle`, or `CC` for short.
 
-* `CC(P,r)` creates a new circle centered at the point `P` with radius `r`. An error is thrown if the radius is nonpositive. 
-* `CC(P,A)` creates a new circle centered at the point `P` that passes through the point `A`.
+* `CC(P,r)` creates a circle centered at the point `P` with radius `r`. An error is thrown if the radius is nonpositive. 
+* `CC(x,y,r)` creates a circle centered at `CP(x,y)` with radius `r`.
+* `CC(P,A)` creates a circle centered at the point `P` that passes through the point `A`.
 
 The center of a constructible circle `Z` is returned by `center(Z)` and its radius by `radius(Z)`.
 
@@ -146,7 +147,7 @@ julia> X ∩ Y
 ```
 
 
-## Construction Drawings
+## Interactive Construction Drawings
 
 A straightedge and compass construction begins with two points, `A` and `B`, that are a unit distance apart. 
 * The straightedge can be used to create a line between two established points. 
@@ -160,7 +161,7 @@ The functions `ruler` and `compass` instantiate this process (see below).
 
 The points in a construction drawing are named by Julia symbols. The first two points are automatically `:A` and `:B` which correspond to the points `CP(0,0)` and `CP(1,0)`, respectively. 
 
-Points are created at the intersection of new lines/circles with the existing lines/circles. The new points are automatically named `:C`, `:D`, and so on. (In case the drawing has more than 26 points, the naming contiues with doubled letters: `:AA`, `:BB`, etc.)
+Points are created at the intersection of new lines/circles with existing lines/circles. The new points are automatically named `:C`, `:D`, and so on. (In case the drawing has more than 26 points, the naming contiues with doubled letters: `:AA`, `:BB`, etc.)
 
 ### Interactive drawing
 
