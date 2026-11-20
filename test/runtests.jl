@@ -2,6 +2,8 @@ using Test, Constructibles, LinearAlgebraX
 
 @testset "Basics" begin
     a = 1 + sqrt(CN(2))
+    b = 1 + sqrtx(2)
+    @test a == b
 
     @test a > 0
     @test a * a / a == a
@@ -11,6 +13,9 @@ using Test, Constructibles, LinearAlgebraX
     φ = (1 + sqrt(CN(5))) / 2
 
     @test iszero(φ^2 - φ - 1)
+end
+
+@testset "Linear Algebra" begin
 
     M = CN.([1 3; 2 5])
     v = CN.([3, 5])
