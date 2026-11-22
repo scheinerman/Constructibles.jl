@@ -1,6 +1,7 @@
 module Constructibles
 
-using SymPy, SimpleDrawing, SimpleDrawingObjects, Plots, LinearAlgebraX
+using SimpleDrawing, SimpleDrawingObjects, Plots, LinearAlgebraX
+using SymPy
 
 import Base:
     (+),

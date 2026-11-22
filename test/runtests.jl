@@ -16,7 +16,6 @@ using Test, Constructibles, LinearAlgebraX
 end
 
 @testset "Linear Algebra" begin
-
     M = CN.([1 3; 2 5])
     v = CN.([3, 5])
 
@@ -46,4 +45,16 @@ end
 
     @test CP(1, 0) ∈ L
     @test CP(1, 0) ∈ Z
+end
+
+@testset "Constructions" begin
+    restart!()
+    ruler(:A, :B)
+    compass(:A, :B)
+    @test get_point(:C) == CP(-1, 0)
+    compass(:C, :A)
+    ruler(:E, :F)
+    @test get_point(:G) == CP(-1//2, 0)
+    delete_line!(CL(0,1,0))
+    show_labels()
 end
