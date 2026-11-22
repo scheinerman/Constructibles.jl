@@ -55,6 +55,6 @@ end
     compass(:C, :A)
     ruler(:E, :F)
     @test get_point(:G) == CP(-1//2, 0)
-    delete_line!(CL(0,1,0))
+    delete_line!(CL(0, 1, 0))
     show_labels()
 end
