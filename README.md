@@ -1,11 +1,13 @@
 # Constructibles
 
+## Overview
+
 This module provides tools for compass and straightedge constructions. The sections below cover the following topics:
 * **Constructible Numbers**: Possible distances between points in a construction. These are exact real numbers that can be created using integers, addition, subtraction, multiplication, division, and square root. 
 * **Construcible Objects**: Points, lines, and circles that can be constructed with straightedge and compass.
 * **Construction Drawings**: Interactive compass and straightedge constructions.
 
-## Quick Example
+### Quick example
 
 Compass and straightedge constructions are seeded with two points `:A` and `:B` that are distance one apart. To find the midpoint of the line segment joining them, proceed as follows:
 
@@ -27,6 +29,21 @@ Point `:G` is the midpoint between `:A` and `:B`.
 julia> get_point(:G)
 CP(1/2, 0)
 ```
+
+### Installation
+
+Either use `] add Constructibles` or 
+```
+julia> using Pkg
+julia> Pkg.add("Constructibles")
+```
+
+**Linux users**: If you get the `ModuleNotFoundError` after `using Constructibles` try this:
+```
+julia> ENV["PYTHON"] = ""; import Pkg; Pkg.build("PyCall")
+```
+and restart Julia.
+
 
 ## Constructible Numbers
 
