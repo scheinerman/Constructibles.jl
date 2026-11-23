@@ -317,7 +317,7 @@ function compass(CTR::Symbol, A::Symbol, B::Symbol, C::Construction=master)
         return nothing
     end
 
-    r = dist(C.points[:A], C.points[:B])
+    r = dist(C.points[A], C.points[B])
     Z = CC(C.points[CTR], r)
     return _compass_work(Z, C)
 end

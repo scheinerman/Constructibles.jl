@@ -56,5 +56,9 @@ end
     ruler(:E, :F)
     @test get_point(:G) == CP(-1//2, 0)
     delete_line!(CL(0, 1, 0))
+
+    compass(:B, :A, :G)  # circle around B with radius |AG| = 1/2
+    @test get_circle(3) == CC(CP(1, 0), CN(1//2))
+
     show_labels()
 end
