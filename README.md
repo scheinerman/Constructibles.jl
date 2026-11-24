@@ -87,6 +87,34 @@ julia> phi^2 - phi - 1
 
 We provide `sqrtx` as an exact square root function. It is easier to type `1 + sqrtx(3)` as opposed to `1 + sqrt(CN(3))`. 
 
+### Exponentiation
+
+Constructible numbers can be raised to integer powers and to rational powers provided the denominator of the exponent is a power of two. 
+```
+julia> a = 1 + sqrtx(2)
+1 + sqrt(2)
+
+julia> a^3
+(1 + sqrt(2))^3
+
+julia> a^(-5)
+-41 + 29*sqrt(2)
+
+julia> a^(3//2)
+(1 + sqrt(2))^(3/2)
+
+julia> ans == sqrtx(a^3)
+true
+
+julia> a^(1//3)
+ERROR: DomainError with 1//3:
+Exponent denominator must be a power of 2
+```
+
+
+
+
+
 ### Conversion
 
 Use `float` or `Float64` to convert a `ConstructibleNumber` to a `Float64`:

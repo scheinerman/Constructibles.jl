@@ -15,6 +15,16 @@ using Test, Constructibles, LinearAlgebraX
     @test iszero(φ^2 - φ - 1)
 end
 
+@testset "Exponentiation" begin
+    a = sqrtx(3) - 1
+    @test a*a*a == a^3 
+    @test inv(a*a) == a^(-2)
+    @test a^2 == a^(2//1)
+
+    b = a^(3//4)
+    @test b^4 == a^3
+end
+
 @testset "Linear Algebra" begin
     M = CN.([1 3; 2 5])
     v = CN.([3, 5])

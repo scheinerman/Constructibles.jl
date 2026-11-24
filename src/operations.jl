@@ -55,3 +55,28 @@ ConstructibleNumbe
 function sqrtx(a::T)::CN where {T<:Real}
     return sqrt(CN(a))
 end
+
+"""
+    (^)(x::CN, p::Rational)::CN
+
+Raise a `ConstructibleNumber` to a `Rational` power. 
+Note that the denominator of the exponent must be a power of 2. 
+"""
+function (^)(x::CN, p::Rational)::CN
+    top = numerator(p)
+    bot = denominator(p)
+
+    if bot == 0
+        throw(DomainError(p, "Invalid exponent"))
+    end
+
+    if bot == 1
+        return x^top
+    end
+
+    if !ispow2(bot)
+        throw(DomainError(p, "Exponent denominator must be a power of 2"))
+    end
+
+    return sqrt(x ^ (2p))
+end
