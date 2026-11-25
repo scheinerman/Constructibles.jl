@@ -2,7 +2,7 @@
 
 ## Overview
 
-This module provides tools for compass and straightedge constructions. The sections below cover the following topics:
+The `Constructibles` module provides tools for compass and straightedge constructions. The sections below cover the following topics:
 * **Constructible Numbers**: Possible distances between points in a construction. These are exact real numbers that can be created using integers, addition, subtraction, multiplication, division, and square root. 
 * **Construcible Objects**: Points, lines, and circles that can be constructed with straightedge and compass.
 * **Construction Drawings**: Interactive compass and straightedge constructions.
@@ -13,18 +13,18 @@ Compass and straightedge constructions are seeded with two points `:A` and `:B` 
 
 ```
 using Constructibles
-compass(:A, :B)
-compass(:B, :A)
-ruler(:A, :B)
-ruler(:C, :D)
-show_labels()
+compass(:A, :B)     # draw a circle centered at A that contains the point B.
+compass(:B, :A)     # draw a circle centered at B. New points C and D are created.
+ruler(:A, :B)       # draw a line through A and B. New points E and F are created.
+ruler(:C, :D)       # draw a line through C and D. New point :G is created.
+show_labels()       # show the names of the points.
 ```
 
 Here is the result:
 
 ![](examples/bisect.png)
 
-Point `:G` is the midpoint between `:A` and `:B`. 
+Point `G` is the midpoint between `A` and `B`. 
 ```
 julia> get_point(:G)
 CP(1/2, 0)
@@ -54,9 +54,9 @@ and restart Julia.
 
 Constructible numbers are exactly the lengths that can be constructed using straightedge and compass (and an initial pair of points unit distance apart). 
 
-This `Constructibles` module provides the the `ConstructibleNumber` type for working with constructible numbers.
+This module provides the the `ConstructibleNumber` type for working with constructible numbers.
 
-> We provide the abbreviation `CN` for `ConstructibleNumber` (because it's a lot to type).
+> The abbreviation `CN` stands for `ConstructibleNumber` (because that's a lot to type).
 
 ### Basics
 
@@ -112,9 +112,6 @@ Exponent denominator must be a power of 2
 ```
 
 
-
-
-
 ### Conversion
 
 Use `float` or `Float64` to convert a `ConstructibleNumber` to a `Float64`:
@@ -144,7 +141,7 @@ We define the abstract type `ConstructibleObject` (or `CO` for short) that has t
 
 A *constructible point* is a point in the plane whose $x$ and $y$ coordinates are both constructible. These have type `ConstructiblePoint`, or `CP` for short.
 
-* `CP(x,y)` creates a new point at coordinates `(x,y)`. 
+* `CP(x,y)` creates a new point at coordinates `(x,y)`. Arguments may be `Integer`, `Rational`, or `ConstructibleNumber`. 
 
 The distance between points `A` and `B` is returned by `dist(A,B)`.
 
@@ -195,10 +192,10 @@ julia> X ∩ Y
 ## Interactive Construction Drawings
 
 A straightedge and compass construction begins with two points, `A` and `B`, that are a unit distance apart. 
-* The straightedge can be used to create a line between two established points. 
-* The compass can be used to create a circle centered at an established point and passing through another establisehd point, or centered at an established point using the distance between two established points as its radius.
+* The straightedge creates a line between two established points. 
+* The compass creates a circle centered at an established point and passing through another establisehd point, or centered at an established point using the distance between two established points as its radius.
 
-Wherever we have there is an intersection of two of these shapes, a new point is established.
+Wherever there is a nonempty intersection of two of these shapes, new points are established.
 
 The functions `ruler` and `compass` instantiate this process (see below).
 
@@ -210,7 +207,7 @@ Points are created at the intersection of new lines/circles with existing lines/
 
 ### Interactive drawing
 
-The function `ruler` (a straightedge) creates lines and `compass` creates circles. The arguments to both are symbolic names of points; that is, `:A` is the input used to refer to point `A` in the construction.
+The function `ruler` (a straightedge) creates lines and the function `compass` creates circles. The arguments to both are symbolic names of points; that is, `:A` is the input used to refer to point `A` in the construction.
 
 * `ruler(:A, :B)` draws a line between the points `A` and `B`.
 * `compass(:A, :B)` draws a circle centered at `A` and passing through `B`.
@@ -234,21 +231,21 @@ The `restart!` function is used to [re]initialize a construction.
 
 #### Labels
 
-A construction typically shows only points, lines, and circles, but not the names of the points. Use `show_labels()` to have the names of the points displayed. The `redraw()` command will redraw the display without the labels. Also, any subsequent call to `ruler` or `compass` will also hide the labels. 
+A construction typically shows only points, lines, and circles, but not the names of the points. Use `show_labels()` to have the names of the points displayed. The `redraw()` command  redraws the display without the labels. Also, any subsequent call to `ruler` or `compass` hides the labels. 
 
 #### Object information
 
-The function `display_points()` prints a list of points and their coordinates. The function `display_objects()` prints a list of lines and circles. 
+The function `display_points()` prints a list of points and their coordinates. The functions `display_lines()`  and `display_circles()` prints a list of lines and circles, respectively. 
 
 ### Example
 
-We illustrate making a construction with these interactive commands:
+We illustrate creating a construction with these interactive commands:
 ```
 restart!()
-compass(:A, :B)
-ruler(:A, :B)
-compass(:C, :A)
-ruler(:A, :E)
+compass(:A, :B)     # Circle centered at A passing through B.
+ruler(:A, :B)       # Line through A and B. Point C is created.
+compass(:C, :A)     # Circle centered at C passing though A. Points D, E, and F are created.
+ruler(:A, :E)       # Line through A and E. Point G is created.
 ```
 
 This is the result:
@@ -287,7 +284,7 @@ julia> display_circles()
 
 ### Accessing the objects
 
-The functions `get_point`, `get_line`, and `get_circle` return the relevant object from the construction.  Points can be accessed either by their symbol (`get_point(:A)`) or by an index number (`get_point(1)` being the same as `get_point(:A)`). Lines and circles are accessed by index number (as shown with `display_lines` and `display_circles`).
+The functions `get_point`, `get_line`, and `get_circle` return the relevant object from the construction.  Points can be accessed either by their symbol (e.g., `get_point(:A)`) or by an index number (e.g., `get_point(1)` which is the same as `get_point(:A)`). Lines and circles are accessed by index number (as shown with `display_lines` and `display_circles`).
 
 ```
 julia> get_point(:D)
@@ -304,7 +301,7 @@ julia> get_circle(4)
 
 ### Additional drawing commands
 
-The functions `add_point!`, `add_circle!`, and `add_line!` can be used to add objects to the construction without using `compass` and `ruler`.
+The functions `add_point!`, `add_circle!`, and `add_line!` add objects to the construction without using `compass` and `ruler`.
 
  The argument to these functions must be a `ConstructiblePoint`, `ConstructibleCircle`, or `ConstructibleLine`, respectively. 
 
@@ -387,7 +384,7 @@ If `X` is a construction, then `Y=deepcopy(X)` makes an independent copy of `X` 
 
 ## Caveats
 
-`ConstructibleNumbers` are exact algebraic expressions. We use `PySym` for calculations with and comparisons of these numbers. As these algebraic expressions become more complicated, the calculations become slower. Constructions with many objects can become very slow.
+`ConstructibleNumbers` are exact algebraic expressions. We use `PySym` for calculations with and comparisons of these numbers. As these algebraic expressions become more complicated, the calculations become slower. **Constructions with many objects can become very slow.**
 
 ### To do list
 
